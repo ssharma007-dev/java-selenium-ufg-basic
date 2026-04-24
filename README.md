@@ -7,9 +7,7 @@ Set your `APPLITOOLS_API_KEY` as an environment variable.
 Follow the steps shown below:
 ![Step 1](public/img.png)
 
-![Step 2](public/img1.png)
-
-![Step 3](public/img2.png)
+![img_1.png](public/img_1.png)
 
 
 
@@ -18,9 +16,15 @@ Headless vs Headed
 
 #### Headed (for demo)
 ```
-java Main
+mvn test
 ```
 #### Headless (for CI)
 ```
-java -Dheadless=true Main
+mvn test -Dheadless=true
 ```
+
+IntelliJ
+- Right-click src/test/java/tests/LoginTest
+- Run test
+- Add VM option for headless:
+-Dheadless=true

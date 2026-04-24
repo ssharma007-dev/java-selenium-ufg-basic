@@ -1,3 +1,4 @@
+//Fallback, vanilla Java Applitools
 import com.applitools.eyes.RectangleSize;
 import com.applitools.eyes.selenium.ClassicRunner;
 import com.applitools.eyes.selenium.Configuration;

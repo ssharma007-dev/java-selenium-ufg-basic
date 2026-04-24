@@ -30,6 +30,13 @@
             <version>5.83.21</version>
         </dependency>
 
+        <!-- TestNG -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.7.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>
