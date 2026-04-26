@@ -16,11 +16,11 @@ Headless vs Headed
 
 #### Headed (for demo)
 ```
-mvn test
+java Main
 ```
 #### Headless (for CI)
 ```
-mvn test -Dheadless=true
+java -Dheadless=true Main
 ```
 
 IntelliJ
