@@ -1,11 +1,13 @@
-//Fallback, vanilla Java Applitools
-package org.example;
+import com.applitools.eyes.BatchInfo;
 import com.applitools.eyes.RectangleSize;
-import com.applitools.eyes.selenium.ClassicRunner;
 import com.applitools.eyes.selenium.Configuration;
 import com.applitools.eyes.selenium.Eyes;
-import com.applitools.eyes.selenium.StitchMode;
 import com.applitools.eyes.selenium.fluent.Target;
+
+// 🔥 UFG imports
+import com.applitools.eyes.visualgrid.BrowserType;
+import com.applitools.eyes.visualgrid.services.VisualGridRunner;
+import com.applitools.eyes.visualgrid.model.*;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -20,8 +22,6 @@ public class Main {
                 System.getProperty("headless", "true")
         );
 
-
-
         ChromeOptions options = new ChromeOptions();
 
         if (isHeadless) {
@@ -33,13 +33,28 @@ public class Main {
 
         WebDriver driver = new ChromeDriver(options);
 
-        Eyes eyes = new Eyes(new ClassicRunner());
+        // UFG Runner
+        VisualGridRunner runner = new VisualGridRunner(5);
+        Eyes eyes = new Eyes(runner);
+
+        BatchInfo batch = new BatchInfo("Selenium Java UFG");
+        //batch.setId(System.getenv("APPLITOOLS_BATCH_ID"));
 
         Configuration config = new Configuration();
         config.setApiKey(System.getenv("APPLITOOLS_API_KEY"));
 
-        //config.setBranchName("feature-login-flow-2"); //checkpoint branch, current test branch where results will be stored
-        //config.setParentBranchName("feature-login-flow"); //baseline branch, baseline source branch for comparison. If it does not exist then falls back to default branch
+        // Multi-browser setup
+        config.addBrowser(1200, 800, BrowserType.CHROME);
+        config.addBrowser(1200, 800, BrowserType.FIREFOX);
+
+        //IOS
+        config.addDeviceEmulation(DeviceName.iPhone_14_Plus, ScreenOrientation.PORTRAIT);
+
+        //Android
+        config.addDeviceEmulation(DeviceName.Pixel_5, ScreenOrientation.PORTRAIT);
+
+        //config.setBranchName("feature-login-flow-2");
+        //config.setParentBranchName("feature-login-flow");
 
         /*
                 First run (no baseline in your branch)
@@ -48,12 +63,10 @@ public class Main {
                 -> Creates a new baseline in feature-login-flow
                 -> If main branch does not exist, then compared against default
 
-
                 Subsequent runs
                 -> baseline already exists in feature-login-flow
                 -> It ignores parentBranchName
                 -> Compares against branch’s own baseline
-
 
                 For real workflow
                 --> First run on main
@@ -63,21 +76,15 @@ public class Main {
 
         eyes.setConfiguration(config);
 
-       // eyes.setStitchMode(StitchMode.CSS); // CSS Scroll
-       // eyes.setStitchMode(StitchMode.SCROLL); //Manual Scroll
-       // eyes.setHostOS("Linux");
-
         try {
             eyes.open(
                     driver,
                     "Applitools Demo App",
-                    "Login Page Test",
+                    "Login Page Test - UFG",
                     new RectangleSize(1200, 800)
             );
 
-
             driver.get("https://demo.applitools.com/");
-
 
             eyes.check("Login Page", Target.window().fully());
 
@@ -90,7 +97,11 @@ public class Main {
             eyes.close();
 
         } finally {
+
             eyes.abortIfNotClosed();
+
+            runner.getAllTestResults(false);
+
             driver.quit();
         }
     }
